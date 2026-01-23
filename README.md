@@ -6,8 +6,10 @@ This project measures how steady someone walks using real accelerometer data and
 
 - **project_work.py** - Your main work file. Complete the empty functions.
 - **tests.py** - Run this to check your work: `python tests.py`
-- **utils.py** - Helper functions (already complete)
-- **sample_data.csv** - Real accelerometer data from someone walking
+- **data/** - Folder containing:
+  - **utils.py** - Helper functions (already complete)
+  - **sample_data.csv** - Real accelerometer data from someone walking
+  - **sample_solution.py** - Complete working solution (for reference)
 
 ## How to Work
 
@@ -18,7 +20,7 @@ This project measures how steady someone walks using real accelerometer data and
 
 ## About the Data
 
-The **sample_data.csv** file contains real accelerometer readings from someone walking:
+The **data/sample_data.csv** file contains real accelerometer readings from someone walking:
 - **X axis**: Left-right movement
 - **Y axis**: Forward-backward movement
 - **Z axis**: Up-down movement (gravity corrected)
@@ -92,7 +94,7 @@ Hint: Use if statements to find the largest value.
 **What to do:** Put all functions together and print results.
 **Why important:** Makes the complete program work and shows all output.
 **How to write:** Call functions in correct order:
-1. Get data: `x,y,z = read_accelerometer_data(filename)` (reads from sample_data.csv)
+1. Get data: `x,y,z = read_accelerometer_data(filename)` (reads from data/sample_data.csv)
 2. Calculate averages for x, y, z
 3. Print averages with 2 decimal places
 4. Calculate wobbles for x, y, z

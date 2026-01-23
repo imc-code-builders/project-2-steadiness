@@ -1,4 +1,4 @@
-from utils import read_accelerometer_data, create_sample_data
+from data.utils import read_accelerometer_data, create_sample_data
 
 
 def calculate_average(values):
@@ -32,4 +32,4 @@ def analyze_walking_steadiness(filename):
 
 
 if __name__ == "__main__":
-    analyze_walking_steadiness('sample_data.csv')
+    analyze_walking_steadiness('data/sample_data.csv')

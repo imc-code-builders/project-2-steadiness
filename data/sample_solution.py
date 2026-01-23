@@ -1,4 +1,4 @@
-from utils import read_accelerometer_data, create_sample_data
+from .utils import read_accelerometer_data, create_sample_data
 
 
 def calculate_average(values):
