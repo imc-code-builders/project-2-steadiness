@@ -1,121 +1,153 @@
-# Walking Steadiness Project
+# Walking Steadiness 🚶
 
-This project measures how steady someone walks using real accelerometer data and identifies your most and least stable directions.
+## What is Walking Steadiness?
 
-## Files You Need
+When you walk, your body naturally wobbles — side to side, forward and back, and up and down. A fitness tracker or phone can measure this movement using an **accelerometer**, a sensor that detects changes in motion along three directions:
 
-- **project_work.py** - Your main work file. Complete the empty functions.
-- **tests.py** - Run this to check your work: `python tests.py`
-- **data/** - Folder containing:
-  - **utils.py** - Helper functions (already complete)
-  - **sample_data.csv** - Real accelerometer data from someone walking
-  - **sample_solution.py** - Complete working solution (for reference)
+- **X axis**: Left and right
+- **Y axis**: Forward and backward
+- **Z axis**: Up and down
 
-## How to Work
+A perfectly steady walk would show very little change in these values. The more you wobble, the more the numbers jump around. In this project, you'll measure *how much* the accelerometer values jump around to give a walking steadiness score.
 
-1. Open project_work.py
-2. Complete functions one at a time (start with Step 1)
-3. Test each function: `python tests.py`
-4. Move to next function when tests pass
+### What is "Wobble"?
 
-## About the Data
+Wobble is a measure of how far each reading strays from the average. If your X values are mostly around 50, but they keep jumping to 20 and 80, that's a lot of wobble. If they stay between 45 and 55, that's very steady.
 
-The **data/sample_data.csv** file contains real accelerometer readings from someone walking:
-- **X axis**: Left-right movement
-- **Y axis**: Forward-backward movement
-- **Z axis**: Up-down movement (gravity corrected)
+We calculate wobble by:
 
-**Gravity Correction**: The Z-axis readings have +1000 added to remove gravity's effect. This makes the Z values comparable to X and Y values, so all axes contribute fairly to the wobble calculation.
+1. Finding the **average** of all the readings
+2. For each reading, finding **how far it is from the average**
+3. Taking the **average of those distances**
 
-## Step-by-Step Instructions
+A small wobble number = steady. A large wobble number = shaky.
 
-### Step 1: calculate_average(values)
-**What to do:** Calculate and return the average of a list of numbers.
-**Why important:** Need averages to measure wobble.
-**How to write:** Use `sum(values) / len(values)`
-**Success:** Test shows "calculate_average() Test 1 passed"
+## Part 1: Micro:bit Data Collection
 
-Example:
-```python
-def calculate_average(values):
-    return sum(values) / len(values)
-```
+### The Challenge
 
-### Step 2: calculate_wobble_for_axis(values, average)
-**What to do:** Calculate and return how much values vary from average.
-**Why important:** Measures steadiness for each direction.
-**How to write:**
-1. Create empty list for deviations
-2. Loop through values, calculate `abs(value - average)`
-3. Add each deviation to list
-4. Return average of deviations
-**Success:** Test shows "Basic wobble calculation works"
+Hold your micro:bit flat in your hands like a tray. Take a few steps around the room and try to keep it as **steady** as possible. How smooth can you keep it? This is harder than it sounds!
 
-Example:
-```python
-def calculate_wobble_for_axis(values, average):
-    deviations = []
-    for value in values:
-        deviation = abs(value - average)
-        deviations.append(deviation)
-    return sum(deviations) / len(deviations)
-```
+### Setup
 
-### Step 3: determine_grade(total_wobble)
-**What to do:** Return grade letter and message based on score.
-**Why important:** Converts numbers into meaningful feedback.
-**How to write:** Use if/elif/else statements. Return tuple like `("A", "message")`
-**Success:** Test shows "All grade tests passed!"
+Open `microbit_starter.py` and copy the code to the micro:bit editor at https://python.microbit.org/v/3/
 
-Grading scale:
-- Less than 50: `("A", "Incredibly smooth! You walk like a robot!")`
-- Less than 100: `("B", "Very steady walking!")`
-- Less than 150: `("C", "Pretty good, but there's room for improvement.")`
-- Less than 200: `("D", "Quite wobbly - try walking more smoothly!")`
-- 200 or more: `("F", "Very shaky! Were you running?")`
+Complete the tasks in the starter code to make the micro:bit log accelerometer data:
 
-### Step 4: find_most_stable_axis(x_wobble, y_wobble, z_wobble)
-**What to do:** Return the name of the axis with the lowest wobble.
-**Why important:** Tells user their strongest stability direction.
-**How to write:** Compare wobble values and return "X", "Y", or "Z"
-**Success:** Test shows "find_most_stable_axis() works correctly"
+1. **Toggle logging on/off** with Button A
+2. **Delete the log** with Button B
+3. **Log accelerometer data** while logging is on — log `x`, `y`, and `z` values from the accelerometer
 
-Hint: Use if statements to find the smallest value.
+### Collecting Your Data
 
-### Step 5: find_least_stable_axis(x_wobble, y_wobble, z_wobble)
-**What to do:** Return the name of the axis with the highest wobble.
-**Why important:** Tells user which direction needs improvement.
-**How to write:** Compare wobble values and return "X", "Y", or "Z"
-**Success:** Test shows "find_least_stable_axis() works correctly"
+1. Flash the completed code onto your micro:bit
+2. Hold the micro:bit flat in your hands
+3. Press Button A to start logging (you should see a checkmark)
+4. Walk 10-15 steps, keeping the micro:bit as steady as you can
+5. Press Button A to stop logging (you should see an X)
+6. Plug the micro:bit into your laptop
+7. Follow the instructions on the slides to download the CSV file
+8. Move the CSV file into the `data/` folder in your project
 
-Hint: Use if statements to find the largest value.
+## Part 2: Analyzing the Data
 
-### Step 6: analyze_walking_steadiness(filename)
-**What to do:** Put all functions together and print results.
-**Why important:** Makes the complete program work and shows all output.
-**How to write:** Call functions in correct order:
-1. Get data: `x,y,z = read_accelerometer_data(filename)` (reads from data/sample_data.csv)
-2. Calculate averages for x, y, z
-3. Print averages with 2 decimal places
-4. Calculate wobbles for x, y, z
-5. Print wobbles with 2 decimal places
-6. Calculate total wobble (add x + y + z wobbles)
-7. Get grade and message
-8. Find most and least stable axes
-9. Print final results including stability analysis
-**Success:** Program runs without errors and shows results
+You'll work in `project_work.py` to build a program that reads the accelerometer data, calculates wobble for each axis, and gives you a grade.
 
-Expected final output should include:
-- Average values for each axis
-- Wobble values for each axis
-- Total wobble score and grade
-- Most stable axis (lowest wobble)
-- Least stable axis (highest wobble)
+The code is set up to read from `data/sample_data.csv` by default. Once you've collected your own data, change the filename at the bottom of `project_work.py` to point to your file.
 
-## Testing Your Work
+---
 
-Run `python tests.py` after completing each function. PASS means success.
+### Step 1: calculate_average()
 
-## Running Your Program
+**Goal:** Return the average of all numbers in a list.
 
-Once complete, run `python project_work.py` to see your results.
+**How:** Use `sum(values) / len(values)`
+
+**Example:** `[10, 20, 30]` → `20.0`
+
+**Test it:** Run `python tests.py` — first test should pass.
+
+---
+
+### Step 2: calculate_wobble_for_axis()
+
+**Goal:** Calculate how much the values vary from the average.
+
+**How:**
+1. Create an empty list for deviations
+2. Loop through the values
+3. For each value, calculate `abs(value - average)` and add it to your list
+4. Return the average of the deviations list
+
+`abs()` gives you the absolute value — it turns negative numbers positive. We care about *how far* each reading is from average, not *which direction*.
+
+**Example:** Values `[10, 20, 30]` with average `20` → deviations are `[10, 0, 10]` → wobble is `6.67`
+
+**Test it:** Run `python tests.py` — second test should pass.
+
+---
+
+### Step 3: determine_grade()
+
+**Goal:** Return a grade letter and message based on the total wobble score.
+
+**How:** Use if/elif/else. Print the resulting grade and message
+
+| Total Wobble | Grade | Message |
+|---|---|---|
+| Less than 50 | A | Incredibly smooth! You walk like a robot! |
+| Less than 100 | B | Very steady walking! |
+| Less than 150 | C | Pretty good, but there's room for improvement. |
+| Less than 200 | D | Quite wobbly - try walking more smoothly! |
+| 200 or more | F | Very shaky! Were you running? |
+
+**Test it:** Run `python tests.py` — third test should pass.
+
+---
+
+### Step 4: find_most_stable_axis()
+
+**Goal:** Return the name of the axis with the **lowest** wobble — `"X"`, `"Y"`, or `"Z"`.
+
+**How:** Compare the three wobble values using if statements to find the smallest.
+
+**Test it:** Run `python tests.py` — fourth test should pass.
+
+---
+
+### Step 5: find_least_stable_axis()
+
+**Goal:** Return the name of the axis with the **highest** wobble — `"X"`, `"Y"`, or `"Z"`.
+
+**How:** Same idea as Step 4, but find the largest instead.
+
+**Test it:** Run `python tests.py` — fifth test should pass.
+
+---
+
+### Step 6: analyze_walking_steadiness()
+
+**Goal:** Put it all together. This function reads the data, calls all your other functions, and prints a full report.
+
+**How:**
+1. Read the data: `x_values, y_values, z_values = read_accelerometer_data(filename)`
+2. Calculate the average for each axis
+3. Print the averages (use `f"{value:.2f}"` to show 2 decimal places)
+4. Calculate wobble for each axis using the averages
+5. Print the wobbles
+6. Calculate total wobble by adding x + y + z wobbles together
+7. Get the grade and message from `determine_grade()`
+8. Find the most and least stable axes
+9. Print the total wobble, grade, message, and stability analysis
+
+**Test it:** Run `python project_work.py` — you should see a full report.
+
+## Testing
+
+Run `python tests.py` after completing each step. It will tell you what passed and give hints if something is wrong.
+
+Run `python project_work.py` to see your final results.
+
+## Challenge
+
+Try walking again with a different strategy — shorter steps? Slower pace? Bent knees? Can you beat your score? Compare with your classmates and see who has the steadiest walk!

@@ -7,8 +7,6 @@ It will tell you which functions are working correctly.
 To run: python tests.py
 """
 
-import sys
-from io import StringIO
 from project_work import (
     calculate_average,
     calculate_wobble_for_axis,
@@ -61,7 +59,7 @@ def test_calculate_wobble_for_axis():
 
     try:
         # Test 1: Simple case where we know the answer
-        values = [8, 10, 12]  # Average is 10, deviations are [2, 0, 2], average deviation is 4/3 ≈ 1.33
+        values = [8, 10, 12]  # Average is 10, deviations are [2, 0, 2], average deviation is 4/3
         average = 10
         result = calculate_wobble_for_axis(values, average)
         expected = 1.3333333333333333
@@ -92,7 +90,6 @@ def test_determine_grade():
     print("Testing determine_grade()...")
 
     try:
-        # Test all grade levels
         test_cases = [
             (25, "A", "Incredibly smooth! You walk like a robot!"),
             (75, "B", "Very steady walking!"),
@@ -104,7 +101,7 @@ def test_determine_grade():
         all_passed = True
         for wobble, expected_grade, expected_message in test_cases:
             result = determine_grade(wobble)
-            if isinstance(result, tuple) and len(result) == 2:
+            if result is not None and len(result) == 2:
                 grade, message = result
                 if grade == expected_grade and message == expected_message:
                     print(f"PASS Grade {expected_grade} test (wobble: {wobble})")
@@ -114,7 +111,8 @@ def test_determine_grade():
                     print(f"   Got: {grade}, '{message}'")
                     all_passed = False
             else:
-                print(f"FAIL determine_grade({wobble}) should return a tuple (grade, message)")
+                print(f"FAIL determine_grade({wobble}) should return two values: grade, message")
+                print(f"   Example: return \"A\", \"Incredibly smooth! You walk like a robot!\"")
                 all_passed = False
 
         if all_passed:
@@ -122,7 +120,7 @@ def test_determine_grade():
 
     except Exception as e:
         print(f"ERROR determine_grade() has an error: {e}")
-        print("Hint: Use if/elif/else and return a tuple like ('A', 'message')")
+        print("Hint: Use if/elif/else and return two values like: return \"A\", \"message\"")
 
     print()
 
@@ -148,7 +146,7 @@ def test_stability_functions():
         else:
             print(f"FAIL find_least_stable_axis(): Expected {expected}, got {result}")
 
-        # Test edge case: X is both most and least stable (all equal)
+        # Test edge case: all equal
         result = find_most_stable_axis(2.0, 2.0, 2.0)
         if result in ["X", "Y", "Z"]:
             print("PASS find_most_stable_axis() handles equal values")
@@ -169,7 +167,7 @@ def test_main_function():
     try:
         print("Running complete analysis with sample data:")
         print("=" * 50)
-        analyze_walking_steadiness(None)  # Use sample data
+        analyze_walking_steadiness('data/sample_data.csv')
         print("=" * 50)
         print("PASS analyze_walking_steadiness() completed without errors!")
 
