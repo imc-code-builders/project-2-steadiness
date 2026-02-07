@@ -71,13 +71,13 @@ The code is set up to read from `data/sample_data.csv` by default. Once you've c
 
 ### Step 2: calculate_wobble_for_axis()
 
-**Goal:** Calculate how much the values vary from the average.
+**Goal:** Calculate how much the values vary ("diviate") from the average.
 
 **How:**
-1. Create an empty list for deviations
+1. Create an empty list to store your caluclated "deviations"
 2. Loop through the values
-3. For each value, calculate `abs(value - average)` and add it to your list
-4. Return the average of the deviations list
+3. For each value, calculate the deviation with `abs(value - average)` and add it to your list
+4. Return the average of the deviations list (HINT: you just wrote a function for this!)
 
 `abs()` gives you the absolute value — it turns negative numbers positive. We care about *how far* each reading is from average, not *which direction*.
 
@@ -151,3 +151,21 @@ Run `python project_work.py` to see your final results.
 ## Challenge
 
 Try walking again with a different strategy — shorter steps? Slower pace? Bent knees? Can you beat your score? Compare with your classmates and see who has the steadiest walk!
+
+## Challenge #2 (Once You've Finished All Three Parts of the Project)
+
+Let's combine your data logging code and your calculations and display the steadiness grade on the Micro:Bit in real time as you walk around!
+
+Here are some suggestions to get started:
+- Instead of using the Micro:Bit log, store your XYZ accerlation values in three different lists.
+- Update your `analyze_walking_steadiness` function:
+  - Instead of reading data from the filename argument, use your three lists of acceleration values.
+  - Remove the print statements and modify the function to return just the letter grade.
+- Call `analyze_walking_steadiness` after you take a new accelerometer reading and `display.show()` the current letter grade before the `sleep(100)` statement.
+
+Flash your Micro:Bit, then turn on logging and walk around to see your letter grade on the screen changing as you go!
+
+Once you have this working, experiment with your code a bit more!
+- What happens if you change the numeric ranges for each letter grade? Increase the numbers? Decrease the numbers?
+- As you leave the Micro:Bit collecting data for longer, does it get easier or harder to change your letter grade? Why?
+  - If you only kept a smaller amount of data at a time (ex: keep only the last 30 readings instead of forever growing your list), would that make it easier or harder to change your letter grade?
