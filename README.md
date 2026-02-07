@@ -74,7 +74,7 @@ The code is set up to read from `data/sample_data.csv` by default. Once you've c
 **Goal:** Calculate how much the values vary ("diviate") from the average.
 
 **How:**
-1. Create an empty list to store your caluclated "deviations"
+1. Create an empty list to store your calculated "deviations"
 2. Loop through the values
 3. For each value, calculate the deviation with `abs(value - average)` and add it to your list
 4. Return the average of the deviations list (HINT: you just wrote a function for this!)
