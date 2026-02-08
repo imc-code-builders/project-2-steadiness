@@ -42,7 +42,7 @@ def analyze_walking_steadiness(filename):
     # 1. Read the data
     x_values, y_values, z_values = read_accelerometer_data(filename)
 
-    # 2. Calculate averages for each axis and print them
+    # 2. Calculate average for each axis and print them
 
     # 3. Calculate wobble for each axis and print them
 
