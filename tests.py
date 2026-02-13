@@ -11,10 +11,10 @@ from project_work import (
     calculate_average,
     calculate_wobble_for_axis,
     determine_grade,
-    find_most_stable_axis,
-    find_least_stable_axis,
     analyze_walking_steadiness
 )
+
+from data.utils import read_accelerometer_data
 
 
 def test_calculate_average():
@@ -91,71 +91,30 @@ def test_determine_grade():
 
     try:
         test_cases = [
-            (25, "A", "Incredibly smooth! You walk like a robot!"),
-            (75, "B", "Very steady walking!"),
-            (125, "C", "Pretty good, but there's room for improvement."),
-            (175, "D", "Quite wobbly - try walking more smoothly!"),
-            (250, "F", "Very shaky! Were you running?")
+            (25, "A"),
+            (75, "B"),
+            (125, "C"),
+            (175, "D"),
+            (250, "F")
         ]
 
         all_passed = True
-        for wobble, expected_grade, expected_message in test_cases:
-            result = determine_grade(wobble)
-            if result is not None and len(result) == 2:
-                grade, message = result
-                if grade == expected_grade and message == expected_message:
-                    print(f"PASS Grade {expected_grade} test (wobble: {wobble})")
-                else:
-                    print(f"FAIL Grade {expected_grade} test:")
-                    print(f"   Expected: {expected_grade}, '{expected_message}'")
-                    print(f"   Got: {grade}, '{message}'")
-                    all_passed = False
+        for wobble, expected_grade in test_cases:
+            grade = determine_grade(wobble)
+            if grade == expected_grade:
+                print(f"PASS Grade {expected_grade} test (wobble: {wobble})")
             else:
-                print(f"FAIL determine_grade({wobble}) should return two values: grade, message")
-                print(f"   Example: return \"A\", \"Incredibly smooth! You walk like a robot!\"")
+                print(f"FAIL Grade {expected_grade} test:")
+                print(f"   Expected: {expected_grade}")
+                print(f"   Got: {grade}")
                 all_passed = False
-
+            
         if all_passed:
             print("PASS All grade tests passed!")
 
     except Exception as e:
         print(f"ERROR determine_grade() has an error: {e}")
-        print("Hint: Use if/elif/else and return two values like: return \"A\", \"message\"")
-
-    print()
-
-
-def test_stability_functions():
-    """Test the stability analysis functions"""
-    print("Testing stability analysis functions...")
-
-    try:
-        # Test find_most_stable_axis
-        result = find_most_stable_axis(2.5, 1.2, 3.8)  # Y should be most stable (lowest)
-        expected = "Y"
-        if result == expected:
-            print("PASS find_most_stable_axis() works correctly")
-        else:
-            print(f"FAIL find_most_stable_axis(): Expected {expected}, got {result}")
-
-        # Test find_least_stable_axis
-        result = find_least_stable_axis(2.5, 1.2, 3.8)  # Z should be least stable (highest)
-        expected = "Z"
-        if result == expected:
-            print("PASS find_least_stable_axis() works correctly")
-        else:
-            print(f"FAIL find_least_stable_axis(): Expected {expected}, got {result}")
-
-        # Test edge case: all equal
-        result = find_most_stable_axis(2.0, 2.0, 2.0)
-        if result in ["X", "Y", "Z"]:
-            print("PASS find_most_stable_axis() handles equal values")
-        else:
-            print(f"FAIL find_most_stable_axis() with equal values: got {result}")
-
-    except Exception as e:
-        print(f"ERROR stability functions have an error: {e}")
-        print("Hint: Compare wobble values and return 'X', 'Y', or 'Z'")
+        print("Hint: Use if/elif/else and return the correct letter as a string!")
 
     print()
 
@@ -164,10 +123,12 @@ def test_main_function():
     """Test the complete analyze_walking_steadiness function"""
     print("Testing analyze_walking_steadiness()...")
 
+    x_values, y_values, z_values = read_accelerometer_data("data/sample_data.csv")
+
     try:
         print("Running complete analysis with sample data:")
         print("=" * 50)
-        analyze_walking_steadiness('data/sample_data.csv')
+        analyze_walking_steadiness(x_values, y_values, z_values)
         print("=" * 50)
         print("PASS analyze_walking_steadiness() completed without errors!")
 
@@ -187,7 +148,6 @@ def run_all_tests():
     test_calculate_average()
     test_calculate_wobble_for_axis()
     test_determine_grade()
-    test_stability_functions()
     test_main_function()
 
     print("=" * 60)
