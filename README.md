@@ -22,38 +22,13 @@ We calculate wobble by:
 
 A small wobble number = steady. A large wobble number = shaky.
 
-## Part 1: Micro:bit Data Collection
+# Part 1: Calculating a Steadiness Score
 
-### The Challenge
+We'll start by doing some math to compute the steadiness score from lists of XYZ accelerometer readings.
 
-Hold your micro:bit flat in your hands like a tray. Take a few steps around the room and try to keep it as **steady** as possible. How smooth can you keep it? This is harder than it sounds!
+Open `project_work.py` and follow the instructions in numerical order.
 
-### Setup
-
-Open `microbit_starter.py` and copy the code to the micro:bit editor at https://python.microbit.org/v/3/
-
-Complete the tasks in the starter code to make the micro:bit log accelerometer data:
-
-1. **Toggle logging on/off** with Button A
-2. **Delete the log** with Button B
-3. **Log accelerometer data** while logging is on — log `x`, `y`, and `z` values from the accelerometer
-
-### Collecting Your Data
-
-1. Flash the completed code onto your micro:bit
-2. Hold the micro:bit flat in your hands
-3. Press Button A to start logging (you should see a checkmark)
-4. Walk 10-15 steps, keeping the micro:bit as steady as you can
-5. Press Button A to stop logging (you should see an X)
-6. Plug the micro:bit into your laptop
-7. Follow the instructions on the slides to download the CSV file
-8. Move the CSV file into the `data/` folder in your project
-
-## Part 2: Analyzing the Data
-
-You'll work in `project_work.py` to build a program that reads the accelerometer data, calculates wobble for each axis, and gives you a grade.
-
-The code is set up to read from `data/sample_data.csv` by default. Once you've collected your own data, change the filename at the bottom of `project_work.py` to point to your file.
+Run the tests in `tests.py` after writing each function to check that your logic is correct.
 
 ---
 
@@ -71,7 +46,7 @@ The code is set up to read from `data/sample_data.csv` by default. Once you've c
 
 ### Step 2: calculate_wobble_for_axis()
 
-**Goal:** Calculate how much the values vary ("diviate") from the average.
+**Goal:** Calculate how much the values vary ("deviate") from the average.
 
 **How:**
 1. Create an empty list to store your calculated "deviations"
@@ -89,83 +64,65 @@ The code is set up to read from `data/sample_data.csv` by default. Once you've c
 
 ### Step 3: determine_grade()
 
-**Goal:** Return a grade letter and message based on the total wobble score.
+**Goal:** Return a grade letter based on the total wobble score.
 
-**How:** Use if/elif/else. Print the resulting grade and message
+**How:** Use if/elif/else. Return the chosen grade as a string.
 
-| Total Wobble | Grade | Message |
-|---|---|---|
-| Less than 50 | A | Incredibly smooth! You walk like a robot! |
-| Less than 100 | B | Very steady walking! |
-| Less than 150 | C | Pretty good, but there's room for improvement. |
-| Less than 200 | D | Quite wobbly - try walking more smoothly! |
-| 200 or more | F | Very shaky! Were you running? |
+| Total Wobble | Grade |
+|---|---|
+| Less than 50 | A |
+| Less than 100 | B |
+| Less than 150 | C |
+| Less than 200 | D |
+| 200 or more | F |
 
 **Test it:** Run `python tests.py` — third test should pass.
 
 ---
 
-### Step 4: find_most_stable_axis()
+### Step 4: analyze_walking_steadiness()
 
-**Goal:** Return the name of the axis with the **lowest** wobble — `"X"`, `"Y"`, or `"Z"`.
-
-**How:** Compare the three wobble values using if statements to find the smallest.
-
-**Test it:** Run `python tests.py` — fourth test should pass.
-
----
-
-### Step 5: find_least_stable_axis()
-
-**Goal:** Return the name of the axis with the **highest** wobble — `"X"`, `"Y"`, or `"Z"`.
-
-**How:** Same idea as Step 4, but find the largest instead.
-
-**Test it:** Run `python tests.py` — fifth test should pass.
-
----
-
-### Step 6: analyze_walking_steadiness()
-
-**Goal:** Put it all together. This function reads the data, calls all your other functions, and prints a full report.
+**Goal:** Put it all together. This function takes in your lists of accelerometer data, calls all your other functions, 
+and returns the final letter grade.
 
 **How:**
-1. Read the data: `x_values, y_values, z_values = read_accelerometer_data(filename)`
-2. Calculate the average for each axis
-3. Print the averages (use `f"{value:.2f}"` to show 2 decimal places)
-4. Calculate wobble for each axis using the averages
-5. Print the wobbles
-6. Calculate total wobble by adding x + y + z wobbles together
-7. Get the grade and message from `determine_grade()`
-8. Find the most and least stable axes
-9. Print the total wobble, grade, message, and stability analysis
+The function takes three lists of accelerometer readings on the X, Y, and Z axis.
 
-**Test it:** Run `python project_work.py` — you should see a full report.
+1. Calculate the average for each axis.
+2. Calculate wobble for each axis using the averages.
+3. Calculate total wobble by adding x + y + z wobbles together.
+4. Calculate the letter grade based on the total wobble and return it.
 
-## Testing
+Use all three of the functions you just wrote!
 
-Run `python tests.py` after completing each step. It will tell you what passed and give hints if something is wrong.
+**Test it:** Run `python tests.py` - all your tests should now pass!
 
-Run `python project_work.py` to see your final results.
+# Part 2 - Put it on the Micro:Bit!
 
-## Challenge
+Open `microbit_starter.py` and copy the code to the micro:bit editor at https://python.microbit.org/v/3/
 
-Try walking again with a different strategy — shorter steps? Slower pace? Bent knees? Can you beat your score? Compare with your classmates and see who has the steadiest walk!
+Complete the tasks in numerical order to calculate and display the steadiness grade to the screen. You'll write some
+Micro:Bit code to collect accelerometer readings, call the functions you just wrote, the display the letter grade to the screen!
 
-## Challenge #2 (Once You've Finished All Three Parts of the Project)
+- We'll use button A to toggle recording data on/off.
+- We'll use button B to clear all our data to start over.
 
-Let's combine your data logging code and your calculations and display the steadiness grade on the Micro:Bit in real time as you walk around!
+## Challenge! (OPTIONAL)
 
-Here are some suggestions to get started:
-- Instead of using the Micro:Bit log, store your XYZ accerlation values in three different lists.
-- Update your `analyze_walking_steadiness` function:
-  - Instead of reading data from the filename argument, use your three lists of acceleration values.
-  - Remove the print statements and modify the function to return just the letter grade.
-- Call `analyze_walking_steadiness` after you take a new accelerometer reading and `display.show()` the current letter grade before the `sleep(100)` statement.
+Try walking with different strategies — shorter steps? Slower pace? Bent knees? Does this make your score better or worse?
 
-Flash your Micro:Bit, then turn on logging and walk around to see your letter grade on the screen changing as you go!
+## Challenge #2! (OPTIONAL)
 
-Once you have this working, experiment with your code a bit more!
-- What happens if you change the numeric ranges for each letter grade? Increase the numbers? Decrease the numbers?
-- As you leave the Micro:Bit collecting data for longer, does it get easier or harder to change your letter grade? Why?
-  - If you only kept a smaller amount of data at a time (ex: keep only the last 30 readings instead of forever growing your list), would that make it easier or harder to change your letter grade?
+Try shaking your microbit for a few seconds until your grade is an F.
+
+If you put the Micro:Bit sitting on the table (the most steady it could possibly be), you'll notice that it's very hard
+to improve the score back towards A!
+
+This is because **the more data you capture, the less each new datapoint affects your score**. If I was not very steady
+10 seconds ago, my grade should not be stuck at an F after I start walking smoothly again!
+
+**_Your Challenge_**: calculate the steadiness score only using the last N number of accelerometer readings.
+N can be any number you want - try using a range of small and big numbers and see what works best!
+
+When you acquire new data past the Nth value (ex: only keeping the last 30 data points, and you now have 31), we should
+remove the oldest data points (at the front of your list) until we only have 30 readings.
